@@ -1,0 +1,44 @@
+/*
+ * Copyright (c) 2024 Arrow Electronics.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/* Pin configuration for cy8ckit_062s2_ai */
+
+&pinctrl {
+	p2_4_sdio_cmd: p2_4_sdio_cmd {
+		pinmux = <DT_CAT1_PINMUX(2, 4, HSIOM_SEL_ACT_14)>;
+		drive-push-pull;
+		input-enable;
+	};
+
+	p2_5_sdio_clk: p2_5_sdio_clk {
+		pinmux = <DT_CAT1_PINMUX(2, 5, HSIOM_SEL_ACT_14)>;
+		drive-push-pull;
+		input-enable;
+	};
+
+	p2_0_sdio_data0: p2_0_sdio_data0 {
+		pinmux = <DT_CAT1_PINMUX(2, 0, HSIOM_SEL_ACT_14)>;
+		drive-push-pull;
+		input-enable;
+	};
+
+	p2_1_sdio_data1: p2_1_sdio_data1 {
+		pinmux = <DT_CAT1_PINMUX(2, 1, HSIOM_SEL_ACT_14)>;
+		drive-push-pull;
+		input-enable;
+	};
+
+	p2_2_sdio_data2: p2_2_sdio_data2 {
+		pinmux = <DT_CAT1_PINMUX(2, 2, HSIOM_SEL_ACT_14)>;
+		drive-push-pull;
+		input-enable;
+	};
+
+	p2_3_sdio_data3: p2_3_sdio_data3 {
+		pinmux = <DT_CAT1_PINMUX(2, 3, HSIOM_SEL_ACT_14)>;
+		drive-push-pull;
+		input-enable;
+	};
+};

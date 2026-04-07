@@ -10,4 +10,6 @@ supported:
   - gpio
   - uart
   - watchdog
+  - cyw43439
+  - sdhc
 vendor: infineon
