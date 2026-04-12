@@ -27,6 +27,7 @@
 		sw0 = &user_bt;
 		watchdog0 = &watchdog0;
 		sdhc0 = &sdhc0;
+		i2c0 = &i2c0;
 	};
 
 	leds {
@@ -150,6 +151,14 @@ uart2: &scb2 {
 	};
 };
 
+i2c0: &scb0 {
+	compatible = "infineon,cat1-i2c";
+
+	/* I2C pins */
+	pinctrl-0 = <&p0_2_scb0_i2c_scl &p0_3_scb0_i2c_sda>;
+	pinctrl-names = "default";
+};
+
 &sdhc0 {
 	status = "okay";
 
@@ -223,6 +232,17 @@ uart2: &scb2 {
 
 &p2_3_sdio_data3 {
 	drive-push-pull;
+};
+
+/* Configure pin control bias mode for i2c0 pins */
+&p0_2_scb0_i2c_scl {
+	drive-open-drain;
+	input-enable;
+};
+
+&p0_3_scb0_i2c_sda {
+	drive-open-drain;
+	input-enable;
 };
 
 &watchdog0 {
