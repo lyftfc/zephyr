@@ -274,11 +274,28 @@ int bt_h4_vnd_setup(const struct device *dev)
 	/* Stabilization delay */
 	(void)k_msleep(BT_STABILIZATION_DELAY_MS);
 
-	/* When FW launched, HCI UART baudrate should be configured to default */
+	/* When FW launched, HCI UART baudrate should be configured to default.
+	 * Add a small delay before host switches baudrate to allow the
+	 * controller to complete its own baudrate transition. Without this,
+	 * garbage bytes may accumulate in the RX FIFO during the transition.
+	 */
 	if (fw_download_speed != default_uart_speed) {
+		k_msleep(50);
 		err = bt_hci_uart_set_baudrate(dev, default_uart_speed);
 		if (err) {
 			return err;
+		}
+		/* Extra settling time after host baudrate change */
+		k_msleep(20);
+
+		/* Flush garbage that may have accumulated in UART RX FIFO
+		 * during the baudrate transition. Read until empty.
+		 */
+		{
+			uint8_t drain_buf[32];
+			while (uart_fifo_read(dev, drain_buf, sizeof(drain_buf)) > 0) {
+				/* drain */
+			}
 		}
 	}
 
