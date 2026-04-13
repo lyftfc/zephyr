@@ -721,12 +721,15 @@ static int bmi270_init(const struct device *dev)
 	if (ret != 0) {
 		return ret;
 	}
+	LOG_DBG("config file written successfully");
 
 	init_ctrl = BMI270_COMPLETE_CONFIG_LOAD;
 	ret = bmi270_reg_write(dev, BMI270_REG_INIT_CTRL, &init_ctrl, 1);
 	if (ret != 0) {
+		LOG_DBG("INIT_CTRL write failed: %d", ret);
 		return ret;
 	}
+	LOG_DBG("INIT_CTRL written, polling INTERNAL_STATUS...");
 
 	/* Timeout after BMI270_CONFIG_FILE_RETRIES x
 	 * BMI270_CONFIG_FILE_POLL_PERIOD_US microseconds.
@@ -736,6 +739,7 @@ static int bmi270_init(const struct device *dev)
 	for (tries = 0; tries <= BMI270_CONFIG_FILE_RETRIES; tries++) {
 		ret = bmi270_reg_read(dev, BMI270_REG_INTERNAL_STATUS, &msg, 1);
 		if (ret != 0) {
+			LOG_DBG("INTERNAL_STATUS read failed: %d", ret);
 			return ret;
 		}
 
@@ -748,8 +752,10 @@ static int bmi270_init(const struct device *dev)
 	}
 
 	if (tries > BMI270_CONFIG_FILE_RETRIES) {
+		LOG_DBG("config init TIMEOUT (INTERNAL_STATUS=0x%02x)", msg);
 		return -EIO;
 	}
+	LOG_DBG("INTERNAL_STATUS OK after %d tries", tries);
 
 #if CONFIG_BMI270_TRIGGER
 	ret = bmi270_init_interrupts(dev);
@@ -766,6 +772,9 @@ static int bmi270_init(const struct device *dev)
 					  &adv_pwr_save, 1,
 					  BMI270_INTER_WRITE_DELAY_US);
 
+	if (ret == 0) {
+		LOG_DBG("init success");
+	}
 	return ret;
 }
 
